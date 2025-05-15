@@ -1,34 +1,20 @@
 
-export interface Challenge {
+export interface ChallengeConfig {
   id: string;
-  title: string;
-  description: string;
-  question: string;
-  placeholder?: string;
-  answer: string;
-  hint?: string;
-  type?: 'text' | 'cipher';
+  answer: string; // For login (stage 0), this is the password. Username 'admin' is implied.
+  promptText?: string; // Text to display as the question/prompt for stage > 0
+  inputPlaceholder?: string; // Placeholder for input field for stage > 0
 }
 
-export const challenges: Challenge[] = [
+export const challenges: ChallengeConfig[] = [
   {
-    id: 'web_pentest_01',
-    title: 'Задание 1: Шпион в исходном коде',
-    description: "Агент, ваша первая миссия — найти учетные данные для доступа к системе. Имя пользователя — 'admin'. Пароль был неосторожно оставлен в виде HTML-комментария в исходном коде этой страницы. Найдите пароль и введите его ниже.",
-    question: "Введите пароль, найденный в HTML-комментариях:",
-    answer: 'Sup3rS3cr3tP@$$',
-    placeholder: 'Введите пароль',
-    hint: "Используйте инструменты разработчика вашего браузера (часто F12 или правый клик > Исследовать элемент), чтобы просмотреть HTML-код страницы. Ищите комментарии вида <!-- ... -->.",
-    type: 'text',
+    id: 'login_access',
+    answer: 'Sup3rS3cr3tP@$$', // Password for username 'admin'
   },
   {
-    id: 'web_pentest_02',
-    title: 'Задание 2: Раскрытый секрет на клиенте',
-    description: "Отлично, Агент. Для следующего задания необходима критически важная информация — секретная фраза. Часто разработчики оставляют такие секреты в открытом виде в атрибутах на стороне клиента для 'удобства'. Тщательно исследуйте HTML-элементы.",
-    question: "Какая секретная фраза спрятана в атрибуте 'data-secret-answer' одного из HTML-элементов на этой странице?",
+    id: 'archive_key_retrieval',
     answer: 'OpenSesame123',
-    placeholder: 'Введите секретную фразу',
-    hint: "Исследуйте различные HTML-элементы на странице. Ищите атрибут с именем 'data-secret-answer'. Его значение — это то, что вам нужно.",
-    type: 'text',
+    promptText: 'Enter the access key for the data archive:',
+    inputPlaceholder: 'Access Key',
   }
 ];

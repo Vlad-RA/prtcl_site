@@ -1,5 +1,7 @@
 
-CodeQuest Challenge Answers:
+Login Stage (Stage 0):
+Username: admin
+Password: Sup3rS3cr3tP@$$
 
-Challenge 1: Source Code Snoop: Sup3rS3cr3tP@$$
-Challenge 2: Exposed Secret: OpenSesame123
+Secret Data Stage (Stage 1):
+Access Key: OpenSesame123

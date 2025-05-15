@@ -1,3 +1,4 @@
+
 import Link from 'next/link';
 import { Terminal } from 'lucide-react';
 
@@ -7,7 +8,7 @@ export function AppHeader() {
       <div className="container mx-auto flex items-center justify-between">
         <Link href="/" className="flex items-center gap-2 text-xl sm:text-2xl font-bold text-primary hover:text-primary/90 transition-colors">
           <Terminal className="h-6 w-6 sm:h-7 sm:w-7" />
-          CodeQuest
+          System Panel 
         </Link>
       </div>
     </header>

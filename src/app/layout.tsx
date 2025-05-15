@@ -1,3 +1,4 @@
+
 import type { Metadata } from 'next';
 import { Roboto_Mono } from 'next/font/google';
 import './globals.css';
@@ -11,8 +12,8 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'CodeQuest',
-  description: 'Embark on a quest of ciphers and challenges!',
+  title: 'System Panel', // Changed title
+  description: 'System Access Control.', // Changed description
 };
 
 export default function RootLayout({
