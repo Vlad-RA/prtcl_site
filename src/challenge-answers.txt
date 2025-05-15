@@ -1,0 +1,6 @@
+CodeQuest Challenge Answers:
+
+Challenge 1: The Initiation: echo
+Challenge 2: Whispers in the Code: Hello, World!
+Challenge 3: The Logic Gate: A map
+Challenge 4: Encrypted Intel: VICTORY
