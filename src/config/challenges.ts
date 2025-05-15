@@ -1,3 +1,4 @@
+
 export interface Challenge {
   id: string;
   title: string;
@@ -11,41 +12,23 @@ export interface Challenge {
 
 export const challenges: Challenge[] = [
   {
-    id: 'cq_01',
-    title: 'Challenge 1: The Initiation',
-    description: 'Welcome, Agent. Your first task is simple, yet crucial. What is the most common command to display text in a terminal?',
-    question: 'Command to display text:',
-    answer: 'echo',
-    placeholder: 'Enter command',
+    id: 'web_pentest_01',
+    title: 'Задание 1: Шпион в исходном коде',
+    description: "Агент, ваша первая миссия — найти учетные данные для доступа к системе. Имя пользователя — 'admin'. Пароль был неосторожно оставлен в виде HTML-комментария в исходном коде этой страницы. Найдите пароль и введите его ниже.",
+    question: "Введите пароль, найденный в HTML-комментариях:",
+    answer: 'Sup3rS3cr3tP@$$',
+    placeholder: 'Введите пароль',
+    hint: "Используйте инструменты разработчика вашего браузера (часто F12 или правый клик > Исследовать элемент), чтобы просмотреть HTML-код страницы. Ищите комментарии вида <!-- ... -->.",
     type: 'text',
   },
   {
-    id: 'cq_02',
-    title: 'Challenge 2: Whispers in the Code',
-    description: 'We\'ve intercepted a coded message. Use the Cipher Assistant to decrypt it. The sender mentioned a "simple shift".',
-    question: 'Decrypt: "Khoor, Zruog!"', // "Hello, World!" shifted by +3 (Caesar)
-    answer: 'Hello, World!',
-    hint: 'This looks like a Caesar cipher. The shift is small, likely related to the number of letters in a common greeting word.',
-    type: 'cipher',
-    placeholder: 'Enter decrypted message',
-  },
-  {
-    id: 'cq_03',
-    title: 'Challenge 3: The Logic Gate',
-    description: 'A classic riddle to test your logical thinking. No ciphers here, just pure deduction.',
-    question: 'I have cities, but no houses. I have mountains, but no trees. I have water, but no fish. What am I?',
-    answer: 'A map',
-    placeholder: 'Your answer',
+    id: 'web_pentest_02',
+    title: 'Задание 2: Раскрытый секрет на клиенте',
+    description: "Отлично, Агент. Для следующего задания необходима критически важная информация — секретная фраза. Часто разработчики оставляют такие секреты в открытом виде в атрибутах на стороне клиента для 'удобства'. Тщательно исследуйте HTML-элементы.",
+    question: "Какая секретная фраза спрятана в атрибуте 'data-secret-answer' одного из HTML-элементов на этой странице?",
+    answer: 'OpenSesame123',
+    placeholder: 'Введите секретную фразу',
+    hint: "Исследуйте различные HTML-элементы на странице. Ищите атрибут с именем 'data-secret-answer'. Его значение — это то, что вам нужно.",
     type: 'text',
-  },
-  {
-    id: 'cq_04',
-    title: 'Challenge 4: Encrypted Intel',
-    description: 'Another encrypted message. This one seems to use a keyword. The keyword is "QUEST".',
-    question: 'Use the Cipher Assistant to decrypt this: "KFIGWAVM"', // Vigenere with key QUEST -> "VICTORY"
-    answer: 'VICTORY',
-    hint: 'This might be a Vigenere cipher. The keyword "QUEST" is vital. Input the ciphertext and hint into the assistant and ask it to decrypt.',
-    type: 'cipher',
-    placeholder: 'Enter decrypted message',
   }
 ];
