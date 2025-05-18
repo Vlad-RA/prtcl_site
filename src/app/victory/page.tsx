@@ -13,13 +13,11 @@ export default function VictoryPage() {
 
   useEffect(() => {
     if (isLoaded) {
-      // If not all challenges are completed, redirect appropriately
       if (currentChallengeIndex < totalChallenges) {
         if (currentChallengeIndex === 0) {
-          router.replace('/');
+          router.replace('/challenge0'); // Redirect to login if not all challenges completed
         } else {
-          // Redirect to their current challenge page
-          router.replace(`/challenge${currentChallengeIndex}`);
+          router.replace(`/challenge${currentChallengeIndex}`); // Redirect to current challenge
         }
       }
       // If currentChallengeIndex >= totalChallenges, they belong here.

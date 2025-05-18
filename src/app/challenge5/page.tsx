@@ -16,12 +16,17 @@ export default function Challenge5Page() {
 
   useEffect(() => {
     if (isLoaded) {
-      if (currentChallengeIndex === 0) { // Not logged in
-        router.replace('/');
-      } else if (currentChallengeIndex < 5) { // Not completed previous challenges
-         router.replace(currentChallengeIndex === 0 ? '/' : `/challenge${currentChallengeIndex}`);
-      } else if (currentChallengeIndex >= totalChallenges) { // All challenges completed
+      if (currentChallengeIndex === 0) { 
+        router.replace('/challenge0');
+      } else if (currentChallengeIndex < 5) { 
+         router.replace(currentChallengeIndex === 0 ? '/challenge0' : `/challenge${currentChallengeIndex}`);
+      } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
+      }
+      // If currentChallengeIndex is > 5, they've passed this, so redirect to their current challenge
+      // (This case might not be hit if totalChallenges = 6, as victory is at index 6)
+      else if (currentChallengeIndex > 5 && currentChallengeIndex < totalChallenges) {
+        router.replace(`/challenge${currentChallengeIndex}`);
       }
     }
   }, [isLoaded, currentChallengeIndex, totalChallenges, router]);

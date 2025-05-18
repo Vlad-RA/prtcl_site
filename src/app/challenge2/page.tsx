@@ -16,12 +16,16 @@ export default function Challenge2Page() {
 
   useEffect(() => {
     if (isLoaded) {
-      if (currentChallengeIndex === 0) { // Not logged in
-        router.replace('/');
-      } else if (currentChallengeIndex < 2) { // Not completed previous challenge
+      if (currentChallengeIndex === 0) { 
+        router.replace('/challenge0');
+      } else if (currentChallengeIndex < 2) { 
         router.replace(`/challenge${currentChallengeIndex}`);
-      } else if (currentChallengeIndex >= totalChallenges) { // All challenges completed
+      } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
+      }
+       // If currentChallengeIndex is > 2, they've passed this, so redirect to their current challenge
+      else if (currentChallengeIndex > 2) {
+        router.replace(`/challenge${currentChallengeIndex}`);
       }
     }
   }, [isLoaded, currentChallengeIndex, totalChallenges, router]);

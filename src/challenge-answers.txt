@@ -1,11 +1,11 @@
 
-Login Stage (Stage 0):
+Login Stage (Stage 0 - /challenge0):
 Username: admin
 Password: Sup3rS3cr3tP@$$
 
 Steps to solve:
 1. Open the browser's developer tools (e.g., right-click on the page and select "Inspect" or press F12).
-2. Examine the HTML source code of the login page (usually /).
+2. Examine the HTML source code of the login page (/challenge0).
 3. Look for HTML comments, which look like <!-- This is a comment -->.
 4. The username 'admin' and the password 'Sup3rS3cr3tP@$$' can be found inside one of these comments.
 5. Upon successful login, a flag will be displayed in a notification. The content of the flag (e.g., flag{W3lc0me_to_th3_Syst3m}) is configured in the application's environment.

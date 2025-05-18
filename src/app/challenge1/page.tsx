@@ -16,15 +16,13 @@ export default function Challenge1Page() {
 
   useEffect(() => {
     if (isLoaded) {
-      if (currentChallengeIndex === 0) { // Not logged in
-        router.replace('/');
-      } else if (currentChallengeIndex < 1) { // Not yet on this challenge
-        // This case should ideally not happen if routing from login is correct
-        router.replace('/'); 
-      } else if (currentChallengeIndex >= totalChallenges) { // All challenges completed
+      if (currentChallengeIndex === 0) { 
+        router.replace('/challenge0'); // Redirect to login if not logged in
+      } else if (currentChallengeIndex < 1) { 
+        router.replace('/challenge0'); 
+      } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
-      // If currentChallengeIndex is > 1, they've passed this, so redirect to their current challenge
       else if (currentChallengeIndex > 1) {
         router.replace(`/challenge${currentChallengeIndex}`);
       }
@@ -41,7 +39,7 @@ export default function Challenge1Page() {
     );
   }
 
-  const currentConfig = challenges[1]; // Config for Challenge 1
+  const currentConfig = challenges[1]; 
 
   if (!currentConfig) {
     return (
