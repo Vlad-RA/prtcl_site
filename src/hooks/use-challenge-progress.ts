@@ -40,17 +40,11 @@ export function useChallengeProgress() {
       } catch (error) {
         console.error("Failed to write to localStorage:", error);
       }
-
-      if (nextIndex === 1) { // Completed login (index 0), moving to challenge 1
-        router.push('/challenge1');
-      } else if (nextIndex >= totalChallenges) { // Completed all challenges
-        router.push('/victory');
-      }
-      // If prevIndex was already at totalChallenges, router.push might not happen if already on /victory.
-      // This is generally fine as this function is called upon successful completion.
+      // Navigation is now handled by useEffects in page components
+      // reacting to currentChallengeIndex change.
       return nextIndex;
     });
-  }, [router]);
+  }, []); // `setCurrentChallengeIndex` is stable, `totalChallenges` is a module constant.
 
   const resetProgress = useCallback(() => {
     setCurrentChallengeIndex(0);
@@ -59,8 +53,8 @@ export function useChallengeProgress() {
     } catch (error) {
       console.error("Failed to write to localStorage:", error);
     }
-    router.push('/');
-  }, [router]);
+    router.push('/'); // Navigation to home on reset is fine here.
+  }, [router]); // `setCurrentChallengeIndex` is stable.
 
   return { currentChallengeIndex, completeChallenge, resetProgress, isLoaded, totalChallenges };
 }
