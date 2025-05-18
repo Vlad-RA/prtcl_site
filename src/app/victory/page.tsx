@@ -13,12 +13,11 @@ export default function VictoryPage() {
 
   useEffect(() => {
     if (isLoaded) {
+      // totalChallenges is the number of challenges (e.g., 6).
+      // currentChallengeIndex becomes equal to totalChallenges when all are complete (index 6 for 6 challenges).
       if (currentChallengeIndex < totalChallenges) {
-        if (currentChallengeIndex === 0) {
-          router.replace('/challenge0'); // Redirect to login if not all challenges completed
-        } else {
-          router.replace(`/challenge${currentChallengeIndex}`); // Redirect to current challenge
-        }
+          // If not all challenges are completed, redirect to their current level (index + 1 for level number)
+          router.replace(`/level${currentChallengeIndex + 1}`);
       }
       // If currentChallengeIndex >= totalChallenges, they belong here.
     }
@@ -34,5 +33,6 @@ export default function VictoryPage() {
     );
   }
 
+  // onRestart in VictoryScreen now calls resetProgress, which redirects to /level1
   return <VictoryScreen onRestart={resetProgress} />;
 }

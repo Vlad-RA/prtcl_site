@@ -1,61 +1,88 @@
 
-Login Stage (Stage 0 - /challenge0):
-Username: admin
-Password: Sup3rS3cr3tP@$$
-
+Level 1: Find Credentials in Code Comments
+URL: /level1
+Challenge: Inspect the HTML source code of the page and find credentials hidden in comments.
+Expected HTML comments:
+<!-- login: admin -->
+<!-- password: pa$$w0rd123 -->
+Input:
+  Username: admin
+  Password: pa$$w0rd123
+Flag: FLAG{html_comments_pwn} (Secret from NEXT_PUBLIC_LEVEL_1_FLAG_SECRET)
 Steps to solve:
-1. Open the browser's developer tools (e.g., right-click on the page and select "Inspect" or press F12).
-2. Examine the HTML source code of the login page (/challenge0).
-3. Look for HTML comments, which look like <!-- This is a comment -->.
-4. The username 'admin' and the password 'Sup3rS3cr3tP@$$' can be found inside one of these comments.
-5. Upon successful login, a flag will be displayed in a notification. The content of the flag (e.g., flag{W3lc0me_to_th3_Syst3m}) is configured in the application's environment.
+1. Open the page /level1 in your browser.
+2. Open the browser's developer tools (e.g., right-click -> Inspect or F12).
+3. Examine the HTML source code. Look for comments <!-- ... -->.
+4. The login 'admin' and password 'pa$$w0rd123' are in these comments.
+5. Enter them into the form.
 
-Secret Data Stage (Stage 1 - /challenge1):
-Access Key: OpenSesame123
+---
 
+Level 2: Hidden Div Element
+URL: /level2
+Challenge: Inspect the page source or DOM to find a hidden div with class .secret-access and enter its content.
+Expected HTML: <div class="secret-access" style="display:none;">accesskey-94831</div>
+Input: accesskey-94831
+Flag: FLAG{dom_hidden_div} (Secret from NEXT_PUBLIC_LEVEL_2_FLAG_SECRET)
 Steps to solve:
-1. After successfully logging in, you will land on a page (e.g., /challenge1) asking for an "access key".
-2. Open the browser's developer tools and inspect the JavaScript code associated with this page. Look for the component that handles input submission (likely ChallengeDetails.tsx).
-3. You will find an explicit comparison being made within the JavaScript logic, for example: `if (userInput.trim().toLowerCase() === "OpenSesame123".toLowerCase())`.
-4. This reveals the required access key: 'OpenSesame123'.
-5. Upon submitting the correct access key, a flag will be displayed. The content of the flag (e.g., flag{S3cr3t_Data_Unl0ck3d}) is configured in the application's environment.
+1. Open the page /level2.
+2. Open developer tools.
+3. Inspect the DOM (Elements tab). Search for elements with `display: none;` or a class like `secret-access`.
+4. Find the div `<div class="secret-access" style="display:none;">accesskey-94831</div>`.
+5. The content is 'accesskey-94831'. Enter this into the input field.
 
-Network Traffic Analysis (Stage 2 - /challenge2):
-Answer: ProtocolX25
+---
 
+Level 3: OSINT Image Challenge
+URL: /level3
+Challenge: An image is displayed. Identify who founded the company associated with the depicted headquarters.
+Example Answer: Larry Page (If image is GooglePlex. The actual image might be different, but the answer will be 'Larry Page' as per config).
+Flag: FLAG{osint_image_trace} (Secret from NEXT_PUBLIC_LEVEL_3_FLAG_SECRET)
 Steps to solve:
-1. Navigate to the challenge page (e.g., /challenge2).
-2. Open the browser's developer tools and inspect the JavaScript code, particularly looking at how the challenge configuration is loaded or defined (likely in src/config/challenges.ts or bundled with the page's JavaScript).
-3. Find the configuration array for challenges. Look for the entry corresponding to this stage (id: 'network_traffic_analysis').
-4. The 'answer' field in this configuration object will contain "ProtocolX25".
-5. Upon submitting the correct answer, a flag will be displayed. The content of the flag is configured in the application's environment.
+1. Open the page /level3.
+2. Observe the image. Use a reverse image search tool (e.g., Google Images, TinEye) with the image.
+3. Identify the location/building (e.g., Googleplex).
+4. Research who founded the company associated with that location (e.g., Google).
+5. Enter the founder's name (e.g., 'Larry Page') into the input field.
 
-Log File Investigation (Stage 3 - /challenge3):
-Answer: ErrorID7749
+---
 
+Level 4: Simulated SQL Injection
+URL: /level4
+Challenge: A form prompts for a username to retrieve roles. Normal input like 'admin' gives "Access denied".
+Injection Input: ' OR '1'='1
+Flag: FLAG{sql_i_like_it} (Secret from NEXT_PUBLIC_LEVEL_4_FLAG_SECRET)
 Steps to solve:
-1. Navigate to the challenge page (e.g., /challenge3).
-2. Open the browser's developer tools and inspect the JavaScript code, particularly looking at how the challenge configuration is loaded or defined.
-3. Find the configuration array for challenges. Look for the entry corresponding to this stage (id: 'log_file_investigation').
-4. The 'answer' field in this configuration object will contain "ErrorID7749".
-5. Upon submitting the correct answer, a flag will be displayed. The content of the flag is configured in the application's environment.
+1. Open the page /level4.
+2. Try entering 'admin' into the form; it should fail or give limited access.
+3. Try entering the SQL injection payload: `' OR '1'='1` (including the single quotes).
+4. This specific input should trigger the success condition.
 
-Server Config Audit (Stage 4 - /challenge4):
-Answer: BackupDisabled
+---
 
+Level 5: Simulated Buffer Overflow Input
+URL: /level5
+Challenge: An input field is vulnerable-looking. Input a very long string.
+Input: A string longer than 100 characters (e.g., 'A' repeated 101 times).
+Result: Page layout breaks, displays "Error: buffer_overflow_detected" and the flag.
+Flag: FLAG{overflow_injected_fun} (Secret from NEXT_PUBLIC_LEVEL_5_FLAG_SECRET)
 Steps to solve:
-1. Navigate to the challenge page (e.g., /challenge4).
-2. Open the browser's developer tools and inspect the JavaScript code, particularly looking at how the challenge configuration is loaded or defined.
-3. Find the configuration array for challenges. Look for the entry corresponding to this stage (id: 'server_config_audit').
-4. The 'answer' field in this configuration object will contain "BackupDisabled".
-5. Upon submitting the correct answer, a flag will be displayed. The content of the flag is configured in the application's environment.
+1. Open the page /level5.
+2. Identify the input field for an "access code".
+3. Enter a very long string of characters (e.g., type 'A' more than 100 times).
+4. Submit the form. The page should visually break and display an error message containing the flag.
 
-Final System Key (Stage 5 - /challenge5):
-Answer: SystemOverrideAlpha
+---
 
+Level 6: Log Analysis and Unusual IP
+URL: /level6
+Challenge: A list of simulated access logs is shown. Identify the IP that requested '/flag_request'.
+Log line to find: 127.0.0.1 - /flag_request
+Input: 127.0.0.1
+Flag: FLAG{logs_tell_all} (Secret from NEXT_PUBLIC_LEVEL_6_FLAG_SECRET)
 Steps to solve:
-1. Navigate to the challenge page (e.g., /challenge5).
-2. Open the browser's developer tools and inspect the JavaScript code, particularly looking at how the challenge configuration is loaded or defined.
-3. Find the configuration array for challenges. Look for the entry corresponding to this stage (id: 'final_system_key').
-4. The 'answer' field in this configuration object will contain "SystemOverrideAlpha".
-5. Upon submitting the correct answer, a flag will be displayed. The content of the flag is configured in the application's environment.
+1. Open the page /level6.
+2. Examine the list of access logs provided on the page.
+3. Look for the entry that shows a request to the path `/flag_request`.
+4. The IP address in that log entry is `127.0.0.1`.
+5. Enter this IP address into the input field.

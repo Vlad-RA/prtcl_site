@@ -5,10 +5,12 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { challenges } from '@/config/challenges';
 
-const CHALLENGE_PROGRESS_KEY = 'codequest_challenge_progress_v1';
-const totalChallenges = challenges.length; 
+const CHALLENGE_PROGRESS_KEY = 'codequest_level_progress_v1'; // Updated key
+const totalChallenges = challenges.length; // Should be 6
 
 export function useChallengeProgress() {
+  // currentChallengeIndex: 0 means level 1, 1 means level 2, ..., 5 means level 6.
+  // 6 means all challenges completed, go to victory.
   const [currentChallengeIndex, setCurrentChallengeIndex] = useState<number>(0);
   const [isLoaded, setIsLoaded] = useState(false);
   const router = useRouter();
@@ -39,7 +41,7 @@ export function useChallengeProgress() {
       } catch (error) {
         console.error("Failed to write to localStorage:", error);
       }
-      // Navigation is now handled by useEffects in page components
+      // Navigation is handled by useEffects in page components
       // reacting to currentChallengeIndex change.
       return nextIndex;
     });
@@ -52,7 +54,7 @@ export function useChallengeProgress() {
     } catch (error) {
       console.error("Failed to write to localStorage:", error);
     }
-    router.push('/challenge0'); 
+    router.push('/level1'); 
   }, [router]);
 
   return { currentChallengeIndex, completeChallenge, resetProgress, isLoaded, totalChallenges };
