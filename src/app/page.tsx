@@ -22,11 +22,12 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isLoaded) {
-      if (currentChallengeIndex === 1) { // User has completed login, should be on challenge 1
-        router.replace('/challenge1');
-      } else if (currentChallengeIndex >= totalChallenges) { // User has completed all challenges
+      if (currentChallengeIndex > 0 && currentChallengeIndex < totalChallenges) {
+        router.replace(`/challenge${currentChallengeIndex}`);
+      } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
+      // If currentChallengeIndex is 0, stay on this page.
     }
   }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
 
@@ -62,7 +63,7 @@ export default function LoginPage() {
         className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
       });
       setTimeout(() => {
-        completeChallenge(); // This will now navigate
+        completeChallenge(); 
       }, 1500);
     } else {
       toast({
@@ -75,7 +76,7 @@ export default function LoginPage() {
 
   return (
     <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
-      {/* Hint for Login Stage (Stage 0) */}
+      {/* Hint for Login Stage (Stage 0): Username: admin, Password: Sup3rS3cr3tP@$$ */}
       <div style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', left: '-9999px', top: '-9999px' }} dangerouslySetInnerHTML={{ __html: "<!-- Username: admin, Password: Sup3rS3cr3tP@$$ -->" }} />
       
       <Card className="w-full max-w-sm shadow-lg">

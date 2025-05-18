@@ -13,17 +13,16 @@ export default function VictoryPage() {
 
   useEffect(() => {
     if (isLoaded) {
+      // If not all challenges are completed, redirect appropriately
       if (currentChallengeIndex < totalChallenges) {
-        // If not all challenges are completed, redirect to the current challenge or login
         if (currentChallengeIndex === 0) {
           router.replace('/');
         } else {
-          // Attempt to go to the specific challenge page if defined, otherwise back to login
-          // For now, simplified: if not 0 and not total, means they are on some challenge page.
-          // But since this is victory, and they aren't at `totalChallenges`, they shouldn't be here.
-          router.replace(`/challenge${currentChallengeIndex}` as string); // or simply '/'
+          // Redirect to their current challenge page
+          router.replace(`/challenge${currentChallengeIndex}`);
         }
       }
+      // If currentChallengeIndex >= totalChallenges, they belong here.
     }
   }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
 
@@ -37,5 +36,5 @@ export default function VictoryPage() {
     );
   }
 
-  return <VictoryScreen onRestart={resetProgress} />; // resetProgress now navigates to '/'
+  return <VictoryScreen onRestart={resetProgress} />;
 }

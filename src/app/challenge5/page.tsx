@@ -10,7 +10,7 @@ import { RefreshCw } from 'lucide-react';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
-export default function Challenge1Page() {
+export default function Challenge5Page() {
   const { currentChallengeIndex, completeChallenge, resetProgress, isLoaded, totalChallenges } = useChallengeProgress();
   const router = useRouter();
 
@@ -18,20 +18,15 @@ export default function Challenge1Page() {
     if (isLoaded) {
       if (currentChallengeIndex === 0) { // Not logged in
         router.replace('/');
-      } else if (currentChallengeIndex < 1) { // Not yet on this challenge
-        // This case should ideally not happen if routing from login is correct
-        router.replace('/'); 
+      } else if (currentChallengeIndex < 5) { // Not completed previous challenges
+         router.replace(currentChallengeIndex === 0 ? '/' : `/challenge${currentChallengeIndex}`);
       } else if (currentChallengeIndex >= totalChallenges) { // All challenges completed
         router.replace('/victory');
-      }
-      // If currentChallengeIndex is > 1, they've passed this, so redirect to their current challenge
-      else if (currentChallengeIndex > 1) {
-        router.replace(`/challenge${currentChallengeIndex}`);
       }
     }
   }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
 
-  if (!isLoaded || (isLoaded && currentChallengeIndex !== 1)) {
+  if (!isLoaded || (isLoaded && currentChallengeIndex !== 5)) {
     return (
       <div className="container mx-auto px-4 py-8 flex flex-col items-center justify-center min-h-[calc(100vh-80px)]">
         <Skeleton className="h-12 w-1/2 mb-4" />
@@ -41,7 +36,7 @@ export default function Challenge1Page() {
     );
   }
 
-  const currentConfig = challenges[1]; // Config for Challenge 1
+  const currentConfig = challenges[5]; 
 
   if (!currentConfig) {
     return (
