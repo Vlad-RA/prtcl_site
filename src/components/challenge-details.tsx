@@ -2,16 +2,16 @@
 "use client";
 
 import { useState } from 'react';
-import { type ChallengeConfig } from '@/config/challenges'; // Updated import
+import { type ChallengeConfig } from '@/config/challenges'; 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Removed CardDescription
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, XCircle } from 'lucide-react';
 
 interface ChallengeDetailsProps {
-  config: ChallengeConfig; // Updated prop name and type
+  config: ChallengeConfig;
   onCorrectAnswer: () => void;
 }
 
@@ -21,10 +21,25 @@ export function ChallengeDetails({ config, onCorrectAnswer }: ChallengeDetailsPr
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (userInput.trim().toLowerCase() === config.answer.toLowerCase()) {
+    // This is the explicit check for the second challenge's answer, easily discoverable by inspecting client-side code.
+    // The config.answer is used for flag generation and other challenges, but this one has a hardcoded check for discoverability.
+    const isCorrect = config.id === 'archive_key_retrieval' 
+      ? userInput.trim().toLowerCase() === "OpenSesame123".toLowerCase()
+      : userInput.trim().toLowerCase() === config.answer.toLowerCase();
+
+    if (isCorrect) {
+      const flagSecret = process.env[config.flagKey];
+      const flagValue = flagSecret ? 'flag{' + flagSecret + '}' : "Error: Flag not configured";
+      
       toast({
-        title: "Correct",
-        description: "Proceeding to the next step.",
+        title: "Correct! Flag Acquired!",
+        description: (
+          <>
+            Proceeding to the next step.
+            <br />
+            Your flag: <span className="text-success-bright font-bold">{flagValue}</span>
+          </>
+        ),
         className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
         action: <CheckCircle className="text-green-500 dark:text-green-400" />,
       });
@@ -46,7 +61,6 @@ export function ChallengeDetails({ config, onCorrectAnswer }: ChallengeDetailsPr
   return (
     <Card className="w-full max-w-2xl mx-auto shadow-lg">
       <CardHeader>
-        {/* Title can be very generic or derived if needed, for now, keeping it minimal */}
         <CardTitle className="text-xl text-center">Data Access</CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -79,7 +93,6 @@ export function ChallengeDetails({ config, onCorrectAnswer }: ChallengeDetailsPr
           </Button>
         </form>
       </CardContent>
-      {/* Footer removed as hints and cipher assistant are gone */}
     </Card>
   );
 }

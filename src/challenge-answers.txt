@@ -8,13 +8,14 @@ Steps to solve:
 2. Examine the HTML source code of the login page.
 3. Look for HTML comments, which look like <!-- This is a comment -->.
 4. The username 'admin' and the password 'Sup3rS3cr3tP@$$' can be found inside one of these comments.
+5. Upon successful login, a flag will be displayed in a notification. The content of the flag (e.g., flag{W3lc0me_to_th3_Syst3m}) is configured in the application's environment.
 
 Secret Data Stage (Stage 1):
 Access Key: OpenSesame123
 
 Steps to solve:
 1. After successfully logging in, you will land on a page asking for an "access key".
-2. Open the browser's developer tools again.
-3. Examine the HTML source code of this new page.
-4. Look for a <div> element that might appear hidden or inconspicuous (it might have `style="display: none;"` or similar).
-5. Inspect the attributes of this <div> element. The access key 'OpenSesame123' will be found within a data attribute, specifically `data-secret-answer`.
+2. Open the browser's developer tools and inspect the JavaScript code associated with this page, particularly the validation logic for the input field.
+3. You will find an explicit comparison being made, for example: `if (userInput.trim().toLowerCase() === "OpenSesame123".toLowerCase())`.
+4. This reveals the required access key: 'OpenSesame123'.
+5. Upon submitting the correct access key, a flag will be displayed in a notification. The content of the flag (e.g., flag{S3cr3t_Data_Unl0ck3d}) is configured in the application's environment.

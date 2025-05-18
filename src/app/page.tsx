@@ -42,12 +42,22 @@ export default function SystemAccessPage() {
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     const expectedUsername = "admin";
-    const expectedPassword = challenges[0].answer;
+    const currentChallengeConfig = challenges[0]; // Login challenge is always the first
+    const expectedPassword = currentChallengeConfig.answer;
 
     if (username === expectedUsername && password === expectedPassword) {
+      const flagSecret = process.env[currentChallengeConfig.flagKey];
+      const flagValue = flagSecret ? 'flag{' + flagSecret + '}' : "Error: Flag not configured";
+      
       toast({
-        title: "Login Successful",
-        description: "Access granted to the next area.",
+        title: "Login Successful! Flag Acquired!",
+        description: (
+          <>
+            Access granted to the next area.
+            <br />
+            Your flag: <span className="text-success-bright font-bold">{flagValue}</span>
+          </>
+        ),
         className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
       });
       setTimeout(() => {
@@ -65,7 +75,6 @@ export default function SystemAccessPage() {
   const currentConfig = challenges[currentChallengeIndex];
   const isVictory = currentChallengeIndex >= totalChallenges;
 
-
   return (
     <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
       {/* Hint for Login Stage (Stage 0) */}
@@ -73,12 +82,7 @@ export default function SystemAccessPage() {
          <div style={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', left: '-9999px', top: '-9999px' }} dangerouslySetInnerHTML={{ __html: "<!-- Username: admin, Password: Sup3rS3cr3tP@$$ -->" }} />
       )}
 
-      {/* Hint for Secret Data Stage (Stage 1) */}
-      {currentChallengeIndex === 1 && (
-        <div data-secret-answer="OpenSesame123" style={{ display: 'none' }}>
-          This div contains the secret answer for the second stage in a data-attribute.
-        </div>
-      )}
+      {/* The explicit answer for stage 1 is now directly in challenge-details.tsx for easy inspection */}
 
       {isVictory ? (
         <VictoryScreen onRestart={resetProgress} />
