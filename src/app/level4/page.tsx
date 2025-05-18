@@ -21,16 +21,17 @@ export default function Level4Page() {
   const challengeConfig = challenges.find(c => c.level === 4);
 
   useEffect(() => {
-    if (isLoaded) {
-      if (currentChallengeIndex < 3) { 
+    if (isLoaded && challengeConfig) {
+      const levelIndex = challengeConfig.level - 1; // 3 for Level 4
+      if (currentChallengeIndex < levelIndex) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
-      } else if (currentChallengeIndex > 3 && currentChallengeIndex < totalChallenges) { 
+      } else if (currentChallengeIndex > levelIndex && currentChallengeIndex < totalChallenges) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
       } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
     }
-  }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
+  }, [isLoaded, currentChallengeIndex, totalChallenges, router, challengeConfig]);
 
   if (!isLoaded || !challengeConfig || (isLoaded && currentChallengeIndex !== 3)) {
     return (
@@ -44,34 +45,20 @@ export default function Level4Page() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (userInput.trim() === challengeConfig.answer) { // Check for the specific SQLi string
-      const flagSecret = process.env[challengeConfig.flagKey];
-      const flagValue = flagSecret ? 'FLAG{' + flagSecret + '}' : "Error: Flag not configured";
-      
-      toast({
-        title: "SQL Injection Successful!",
-        description: (
-          <>
-            Access granted! System vulnerable.
-            <br />
-            Your flag: <span className="text-success-bright font-bold">{flagValue}</span>
-          </>
-        ),
-        className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
-      });
-      setTimeout(() => {
-        completeChallenge();
-      }, 3000);
+    if (userInput.trim() === challengeConfig.answer) { 
+      alert(challengeConfig.flagValue);
+      completeChallenge();
+      window.location.href = '/level5';
     } else if (userInput.trim().toLowerCase() === 'admin') {
       toast({
         title: "Access Denied",
-        description: "Normal users do not have sufficient privileges.",
+        description: "Normal users do not have sufficient privileges. Think about how web applications handle user input in queries.",
         variant: "destructive",
       });
     } else {
       toast({
         title: "Query Error",
-        description: "The input did not yield any results or caused an error.",
+        description: "The input did not yield any results or caused an error. Try a different approach.",
         variant: "destructive",
       });
     }

@@ -8,13 +8,14 @@ Expected HTML comments:
 Input:
   Username: admin
   Password: pa$$w0rd123
-Flag: FLAG{html_comments_pwn} (Secret from NEXT_PUBLIC_LEVEL_1_FLAG_SECRET)
+Flag: FLAG{html_comments_pwn} (Displayed via browser alert() after correct input)
 Steps to solve:
 1. Open the page /level1 in your browser.
 2. Open the browser's developer tools (e.g., right-click -> Inspect or F12).
-3. Examine the HTML source code. Look for comments <!-- ... -->.
+3. Examine the HTML source code (often in the "Elements" or "Inspector" tab, or by viewing page source). Look for comments <!-- ... -->.
 4. The login 'admin' and password 'pa$$w0rd123' are in these comments.
 5. Enter them into the form.
+6. An alert box will appear with the flag. Click "OK" to proceed.
 
 ---
 
@@ -23,27 +24,29 @@ URL: /level2
 Challenge: Inspect the page source or DOM to find a hidden div with class .secret-access and enter its content.
 Expected HTML: <div class="secret-access" style="display:none;">accesskey-94831</div>
 Input: accesskey-94831
-Flag: FLAG{dom_hidden_div} (Secret from NEXT_PUBLIC_LEVEL_2_FLAG_SECRET)
+Flag: FLAG{dom_hidden_div} (Displayed via browser alert() after correct input)
 Steps to solve:
 1. Open the page /level2.
 2. Open developer tools.
 3. Inspect the DOM (Elements tab). Search for elements with `display: none;` or a class like `secret-access`.
 4. Find the div `<div class="secret-access" style="display:none;">accesskey-94831</div>`.
 5. The content is 'accesskey-94831'. Enter this into the input field.
+6. An alert box will appear with the flag. Click "OK" to proceed.
 
 ---
 
 Level 3: OSINT Image Challenge
 URL: /level3
 Challenge: An image is displayed. Identify who founded the company associated with the depicted headquarters.
-Example Answer: Larry Page (If image is GooglePlex. The actual image might be different, but the answer will be 'Larry Page' as per config).
-Flag: FLAG{osint_image_trace} (Secret from NEXT_PUBLIC_LEVEL_3_FLAG_SECRET)
+Answer: Larry Page (Based on the placeholder image. Actual solving would require OSINT on the real image).
+Flag: FLAG{osint_image_trace} (Displayed via browser alert() after correct input)
 Steps to solve:
 1. Open the page /level3.
-2. Observe the image. Use a reverse image search tool (e.g., Google Images, TinEye) with the image.
-3. Identify the location/building (e.g., Googleplex).
-4. Research who founded the company associated with that location (e.g., Google).
+2. Observe the image. Use a reverse image search tool (e.g., Google Images, TinEye) with the image URL or by uploading/pasting the image.
+3. Identify the location/building shown in the image.
+4. Research who founded the company associated with that location.
 5. Enter the founder's name (e.g., 'Larry Page') into the input field.
+6. An alert box will appear with the flag. Click "OK" to proceed.
 
 ---
 
@@ -51,12 +54,13 @@ Level 4: Simulated SQL Injection
 URL: /level4
 Challenge: A form prompts for a username to retrieve roles. Normal input like 'admin' gives "Access denied".
 Injection Input: ' OR '1'='1
-Flag: FLAG{sql_i_like_it} (Secret from NEXT_PUBLIC_LEVEL_4_FLAG_SECRET)
+Flag: FLAG{sql_i_like_it} (Displayed via browser alert() after correct input)
 Steps to solve:
 1. Open the page /level4.
 2. Try entering 'admin' into the form; it should fail or give limited access.
 3. Try entering the SQL injection payload: `' OR '1'='1` (including the single quotes).
 4. This specific input should trigger the success condition.
+5. An alert box will appear with the flag. Click "OK" to proceed.
 
 ---
 
@@ -64,13 +68,14 @@ Level 5: Simulated Buffer Overflow Input
 URL: /level5
 Challenge: An input field is vulnerable-looking. Input a very long string.
 Input: A string longer than 100 characters (e.g., 'A' repeated 101 times).
-Result: Page layout breaks, displays "Error: buffer_overflow_detected" and the flag.
-Flag: FLAG{overflow_injected_fun} (Secret from NEXT_PUBLIC_LEVEL_5_FLAG_SECRET)
+Result: Page layout breaks, displays "Error: buffer_overflow_detected" and the flag directly on the page.
+Flag: FLAG{overflow_injected_fun} (Displayed directly on the visually "broken" page content)
 Steps to solve:
 1. Open the page /level5.
 2. Identify the input field for an "access code".
 3. Enter a very long string of characters (e.g., type 'A' more than 100 times).
 4. Submit the form. The page should visually break and display an error message containing the flag.
+5. After 3 seconds, the page will automatically redirect.
 
 ---
 
@@ -79,10 +84,14 @@ URL: /level6
 Challenge: A list of simulated access logs is shown. Identify the IP that requested '/flag_request'.
 Log line to find: 127.0.0.1 - /flag_request
 Input: 127.0.0.1
-Flag: FLAG{logs_tell_all} (Secret from NEXT_PUBLIC_LEVEL_6_FLAG_SECRET)
+Flag: FLAG{logs_tell_all} (Displayed via browser alert() after correct input)
 Steps to solve:
 1. Open the page /level6.
 2. Examine the list of access logs provided on the page.
 3. Look for the entry that shows a request to the path `/flag_request`.
 4. The IP address in that log entry is `127.0.0.1`.
 5. Enter this IP address into the input field.
+6. An alert box will appear with the flag. Click "OK" to proceed to the victory screen.
+
+---
+Note: Flags are hardcoded in the application's frontend JavaScript files (`src/config/challenges.ts`). The `.env` file is not used for client-side flag retrieval in this purely frontend CTF setup.

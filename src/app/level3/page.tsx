@@ -22,16 +22,17 @@ export default function Level3Page() {
   const challengeConfig = challenges.find(c => c.level === 3);
 
   useEffect(() => {
-    if (isLoaded) {
-      if (currentChallengeIndex < 2) { 
+    if (isLoaded && challengeConfig) {
+      const levelIndex = challengeConfig.level - 1; // 2 for Level 3
+      if (currentChallengeIndex < levelIndex) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
-      } else if (currentChallengeIndex > 2 && currentChallengeIndex < totalChallenges) { 
+      } else if (currentChallengeIndex > levelIndex && currentChallengeIndex < totalChallenges) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
       } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
     }
-  }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
+  }, [isLoaded, currentChallengeIndex, totalChallenges, router, challengeConfig]);
 
   if (!isLoaded || !challengeConfig || (isLoaded && currentChallengeIndex !== 2)) {
     return (
@@ -47,27 +48,13 @@ export default function Level3Page() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (userInput.trim().toLowerCase() === (challengeConfig.answer as string).toLowerCase()) {
-      const flagSecret = process.env[challengeConfig.flagKey];
-      const flagValue = flagSecret ? 'FLAG{' + flagSecret + '}' : "Error: Flag not configured";
-      
-      toast({
-        title: "Identification Successful!",
-        description: (
-          <>
-            Correct! Moving to the next challenge.
-            <br />
-            Your flag: <span className="text-success-bright font-bold">{flagValue}</span>
-          </>
-        ),
-        className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
-      });
-      setTimeout(() => {
-        completeChallenge();
-      }, 3000);
+      alert(challengeConfig.flagValue);
+      completeChallenge();
+      window.location.href = '/level4';
     } else {
       toast({
         title: "Incorrect Identification",
-        description: "That's not the right answer. Try again.",
+        description: "That's not the right answer. Try a reverse image search or other OSINT techniques.",
         variant: "destructive",
       });
     }

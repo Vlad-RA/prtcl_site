@@ -101,7 +101,4 @@
     @apply bg-background text-foreground;
   }
 }
-
-.text-success-bright {
-  color: hsl(120 100% 50%); /* Bright Green #00FF00 */
-}
+/* Removed .text-success-bright as flags are no longer in toasts */

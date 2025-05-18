@@ -22,16 +22,17 @@ export default function Level6Page() {
   const challengeConfig = challenges.find(c => c.level === 6);
 
   useEffect(() => {
-    if (isLoaded) {
-      if (currentChallengeIndex < 5) { 
+    if (isLoaded && challengeConfig) {
+      const levelIndex = challengeConfig.level - 1; // 5 for Level 6
+      if (currentChallengeIndex < levelIndex) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
-      } else if (currentChallengeIndex > 5 && currentChallengeIndex < totalChallenges) { // Should not happen if totalChallenges is 6
+      } else if (currentChallengeIndex > levelIndex && currentChallengeIndex < totalChallenges) { // Should not happen if totalChallenges is 6
         router.replace(`/level${currentChallengeIndex + 1}`);
       } else if (currentChallengeIndex >= totalChallenges) { // Already completed all
         router.replace('/victory');
       }
     }
-  }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
+  }, [isLoaded, currentChallengeIndex, totalChallenges, router, challengeConfig]);
 
   if (!isLoaded || !challengeConfig || (isLoaded && currentChallengeIndex !== 5)) {
     return (
@@ -47,27 +48,13 @@ export default function Level6Page() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (userInput.trim() === challengeConfig.answer) {
-      const flagSecret = process.env[challengeConfig.flagKey];
-      const flagValue = flagSecret ? 'FLAG{' + flagSecret + '}' : "Error: Flag not configured";
-      
-      toast({
-        title: "IP Identified!",
-        description: (
-          <>
-            Correct! You've completed all challenges.
-            <br />
-            Your final flag: <span className="text-success-bright font-bold">{flagValue}</span>
-          </>
-        ),
-        className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
-      });
-      setTimeout(() => {
-        completeChallenge();
-      }, 3000);
+      alert(challengeConfig.flagValue);
+      completeChallenge();
+      window.location.href = '/victory';
     } else {
       toast({
         title: "Incorrect IP",
-        description: "That IP doesn't seem to be the one we're looking for.",
+        description: "That IP doesn't seem to be the one we're looking for. Check the logs again.",
         variant: "destructive",
       });
     }

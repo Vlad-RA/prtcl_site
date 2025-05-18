@@ -21,17 +21,17 @@ export default function Level2Page() {
   const challengeConfig = challenges.find(c => c.level === 2);
 
   useEffect(() => {
-    if (isLoaded) {
-      if (currentChallengeIndex < 1) { // Not completed level 1
-        router.replace('/level1');
-      } else if (currentChallengeIndex > 1 && currentChallengeIndex < totalChallenges) { // Ahead of this level
+    if (isLoaded && challengeConfig) {
+      const levelIndex = challengeConfig.level - 1; // 1 for Level 2
+      if (currentChallengeIndex < levelIndex) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
-      } else if (currentChallengeIndex >= totalChallenges) { // All completed
+      } else if (currentChallengeIndex > levelIndex && currentChallengeIndex < totalChallenges) { 
+        router.replace(`/level${currentChallengeIndex + 1}`);
+      } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
-      // If currentChallengeIndex is 1, stay on this page.
     }
-  }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
+  }, [isLoaded, currentChallengeIndex, totalChallenges, router, challengeConfig]);
 
   if (!isLoaded || !challengeConfig || (isLoaded && currentChallengeIndex !== 1)) {
     return (
@@ -46,27 +46,13 @@ export default function Level2Page() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (userInput.trim() === challengeConfig.answer) {
-      const flagSecret = process.env[challengeConfig.flagKey];
-      const flagValue = flagSecret ? 'FLAG{' + flagSecret + '}' : "Error: Flag not configured";
-      
-      toast({
-        title: "Access Key Accepted!",
-        description: (
-          <>
-            Correct. Proceeding to next level.
-            <br />
-            Your flag: <span className="text-success-bright font-bold">{flagValue}</span>
-          </>
-        ),
-        className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
-      });
-      setTimeout(() => {
-        completeChallenge();
-      }, 3000);
+      alert(challengeConfig.flagValue);
+      completeChallenge();
+      window.location.href = '/level3';
     } else {
       toast({
         title: "Incorrect Key",
-        description: "The provided access key is not valid.",
+        description: "The provided access key is not valid. Inspect the page elements carefully.",
         variant: "destructive",
       });
     }

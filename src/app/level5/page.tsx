@@ -9,12 +9,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import React, { useState, useEffect } from 'react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/use-toast'; // Keep for non-flag toasts
 import { useRouter } from 'next/navigation';
 
 export default function Level5Page() {
   const { currentChallengeIndex, completeChallenge, isLoaded, totalChallenges } = useChallengeProgress();
-  // const { toast } = useToast(); // Toast might not be used if page breaks
+  const { toast } = useToast();
   const router = useRouter();
   const [userInput, setUserInput] = useState('');
   const [isOverflowed, setIsOverflowed] = useState(false);
@@ -22,16 +22,17 @@ export default function Level5Page() {
   const challengeConfig = challenges.find(c => c.level === 5);
 
   useEffect(() => {
-    if (isLoaded && !isOverflowed) { // Only redirect if not in overflow state
-      if (currentChallengeIndex < 4) { 
+    if (isLoaded && challengeConfig && !isOverflowed) { 
+      const levelIndex = challengeConfig.level - 1; // 4 for Level 5
+      if (currentChallengeIndex < levelIndex) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
-      } else if (currentChallengeIndex > 4 && currentChallengeIndex < totalChallenges) { 
+      } else if (currentChallengeIndex > levelIndex && currentChallengeIndex < totalChallenges) { 
         router.replace(`/level${currentChallengeIndex + 1}`);
       } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
     }
-  }, [isLoaded, currentChallengeIndex, totalChallenges, router, isOverflowed]);
+  }, [isLoaded, currentChallengeIndex, totalChallenges, router, challengeConfig, isOverflowed]);
 
   if (!isLoaded || !challengeConfig || (isLoaded && currentChallengeIndex !== 4 && !isOverflowed)) {
     return (
@@ -43,8 +44,7 @@ export default function Level5Page() {
     );
   }
   
-  const flagSecret = challengeConfig ? process.env[challengeConfig.flagKey] : null;
-  const flagValue = flagSecret ? 'FLAG{' + flagSecret + '}' : "Error: Flag not configured";
+  const flagValueForDisplay = challengeConfig ? challengeConfig.flagValue : "Error: Flag not configured";
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -54,24 +54,21 @@ export default function Level5Page() {
       // Simulate visual break
       if (document.body) {
         document.body.innerHTML = `
-          <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; color: #0f0; font-family: monospace; padding: 20px; font-size: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;">
-            <h1>Error: buffer_overflow_detected</h1>
-            <p style="color: #0f0; font-size: 20px; margin-top: 20px;">${flagValue}</p>
-            <p style="margin-top: 20px;">Redirecting...</p>
+          <div style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #111; color: #0f0; font-family: monospace; padding: 20px; font-size: 16px; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; box-sizing: border-box;">
+            <h1 style="font-size: 24px; color: #f00; margin-bottom: 20px;">Error: buffer_overflow_detected</h1>
+            <p style="color: #0f0; font-size: 20px; margin-top: 20px; word-break: break-all;">${flagValueForDisplay}</p>
+            <p style="margin-top: 30px; color: #ccc;">Redirecting in 3 seconds...</p>
           </div>
         `;
       }
       setTimeout(() => {
         completeChallenge();
-        // Router might not work if body is replaced, ensure progress is saved
-        // The useEffect will handle navigation on next load if router fails here
-        router.push(`/level6`); 
+        window.location.href = '/level6'; 
       }, 3000);
     } else {
-      const { toast } = useToast(); // Get toast here as it's conditional
       toast({
         title: "Input Normal",
-        description: "The system processed the input normally. No overflow detected.",
+        description: "The system processed the input normally. No overflow detected. Try a much longer input.",
         variant: "default",
       });
     }
@@ -86,7 +83,7 @@ export default function Level5Page() {
     <div className="container mx-auto px-2 sm:px-4 py-6 sm:py-8 flex flex-col items-center justify-center min-h-[calc(100vh-100px)]">
       <Card className="w-full max-w-md shadow-lg">
         <CardHeader>
-          <CardTitle className="text-2xl text-center">System Input</CardTitle>
+          <CardTitle className="text-2xl text-center">System Input Test</CardTitle>
           <CardDescription className="text-center">{challengeConfig.promptText}</CardDescription>
         </CardHeader>
         <CardContent>

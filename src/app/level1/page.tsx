@@ -23,15 +23,16 @@ export default function Level1Page() {
   const challengeConfig = challenges.find(c => c.level === 1);
 
   useEffect(() => {
-    if (isLoaded) {
-      if (currentChallengeIndex > 0 && currentChallengeIndex < totalChallenges) {
+    if (isLoaded && challengeConfig) {
+      const levelIndex = challengeConfig.level -1;
+      if (currentChallengeIndex > levelIndex && currentChallengeIndex < totalChallenges) {
         router.replace(`/level${currentChallengeIndex + 1}`);
       } else if (currentChallengeIndex >= totalChallenges) { 
         router.replace('/victory');
       }
-      // If currentChallengeIndex is 0, stay on this page (Level1Page).
+      // If currentChallengeIndex is 0 (levelIndex for Level 1), stay on this page.
     }
-  }, [isLoaded, currentChallengeIndex, totalChallenges, router]);
+  }, [isLoaded, currentChallengeIndex, totalChallenges, router, challengeConfig]);
 
   if (!isLoaded || !challengeConfig || (isLoaded && currentChallengeIndex !== 0)) {
     return (
@@ -48,27 +49,13 @@ export default function Level1Page() {
   const handleLoginSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (username === expectedUsername && password === expectedPassword) {
-      const flagSecret = process.env[challengeConfig.flagKey];
-      const flagValue = flagSecret ? 'FLAG{' + flagSecret + '}' : "Error: Flag not configured";
-      
-      toast({
-        title: "Login Successful!",
-        description: (
-          <>
-            Access granted.
-            <br />
-            Your flag: <span className="text-success-bright font-bold">{flagValue}</span>
-          </>
-        ),
-        className: "bg-green-100 border-green-500 text-green-700 dark:bg-green-900 dark:border-green-700 dark:text-green-300",
-      });
-      setTimeout(() => {
-        completeChallenge(); 
-      }, 3000);
+      alert(challengeConfig.flagValue);
+      completeChallenge(); 
+      window.location.href = '/level2';
     } else {
       toast({
         title: "Login Failed",
-        description: "Invalid username or password.",
+        description: "Invalid username or password. Check comments in page source for a hint!",
         variant: "destructive",
       });
     }

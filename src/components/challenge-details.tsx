@@ -22,10 +22,15 @@ export function ChallengeDetails({ config, onCorrectAnswer }: ChallengeDetailsPr
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // This is the explicit check for the second challenge's answer, easily discoverable by inspecting client-side code.
-    // The config.answer is used for flag generation and other challenges, but this one has a hardcoded check for discoverability.
+    // The config.answer is used for flag generation and other challenges, but this one has a hardcoded check for discoverability.    
+    const normalizedUserInput = userInput.trim().toLowerCase();
+    
     const isCorrect = config.id === 'archive_key_retrieval' 
       ? userInput.trim().toLowerCase() === "OpenSesame123".toLowerCase()
-      : userInput.trim().toLowerCase() === config.answer.toLowerCase();
+      : Array.isArray(config.answer)
+        ? config.answer.map(ans => ans.toLowerCase()).includes(normalizedUserInput)
+        : normalizedUserInput === config.answer.toLowerCase();
+
 
     if (isCorrect) {
       const flagSecret = process.env[config.flagKey];
